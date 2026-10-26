@@ -25,6 +25,9 @@ jobs:
 
       - name: Lancer le script Radar
         run: python radar_itltp.py
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          EMAIL_RECEIVER: ${{ secrets.EMAIL_RECEIVER }}
 
       - name: Publier automatiquement la mise à jour
         uses: stefanzweifel/git-auto-commit-action@v4
