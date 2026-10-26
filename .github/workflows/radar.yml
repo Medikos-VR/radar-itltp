@@ -33,5 +33,4 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "Mise à jour automatique du radar des chantiers"
-          file_pattern: index.htmlour automatique du radar des chantiers"
           file_pattern: index.html
