@@ -1,19 +1,33 @@
 name: Radar ITLTP Hebdo
+
 on:
   schedule:
     - cron: '0 6 * * 1'
   workflow_dispatch:
+
+permissions:
+  contents: write
+
 jobs:
   executer-radar:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - name: Récupérer le code
+        uses: actions/checkout@v3
+
+      - name: Installer Python
+        uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-      - run: pip install requests
-      - env:
-          EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
-          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-          EMAIL_RECEIVER: ${{ secrets.EMAIL_RECEIVER }}
+
+      - name: Installer les dépendances
+        run: pip install requests
+
+      - name: Lancer le script Radar
         run: python radar_itltp.py
+
+      - name: Publier automatiquement la mise à jour
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Mise à jour automatique du radar des chantiers"
+          file_pattern: index.html
