@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radar I.T.L.T.P.</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root { --jaune-tp: #f59e0b; --fond: #0f172a; --carte: #1e293b; --texte: #f8fafc; --secondaire: #94a3b8; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+        body { background: var(--fond); color: var(--texte); padding: 12px; max-width: 600px; margin: 0 auto; }
+        header { margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #334155; }
+        h1 { font-size: 1.2rem; color: var(--jaune-tp); margin-bottom: 4px; }
+        .carte { background: var(--carte); border-radius: 12px; padding: 16px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.05); }
+        .carte-entete { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 0.8rem; }
+        .badge { padding: 4px 8px; border-radius: 6px; font-weight: 700; }
+        .badge-confirme { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+        .badge-verifier { background: rgba(249, 115, 22, 0.2); color: #fb923c; }
+        .entreprise { font-size: 1.15rem; color: #fff; margin-bottom: 6px; }
+        .role { font-size: 0.9rem; color: var(--secondaire); margin-bottom: 16px; }
+        .actions { display: flex; gap: 10px; margin-bottom: 16px; }
+        .btn { flex: 1; text-align: center; text-decoration: none; padding: 12px 8px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer; border: none; }
+        .btn-appeler { background: #e2e8f0; color: #0f172a; }
+        .btn-devis { background: var(--jaune-tp); color: #451a03; }
+        details { background: rgba(255,255,255,0.03); border-radius: 8px; margin-bottom: 8px; }
+        summary { padding: 12px; font-size: 0.9rem; font-weight: 600; cursor: pointer; }
+        .contenu-details { padding: 0 12px 12px 12px; font-size: 0.85rem; color: #cbd5e1; }
+        .bloc-engin { color: #fde68a; margin: 8px 0; }
+
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; padding: 20px; }
+        .modal-content { background: var(--carte); padding: 20px; border-radius: 12px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; position: relative; }
+        .fermer-modal { position: absolute; right: 15px; top: 15px; font-size: 1.5rem; color: #fff; cursor: pointer; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 0.85rem; color: var(--secondaire); margin-bottom: 5px; }
+        .form-group input { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: #fff; font-size: 1rem; }
+        .info-client { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 6px; font-size: 0.85rem; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+    <header><h1>🚜 Radar I.T.L.T.P.</h1></header>
+    
+    
+        <div class="carte" data-statut="Confirmé">
+            <div class="carte-entete">
+                <span class="badge badge-confirme">🟢 ATTRIBUÉ</span>
+                <span class="score">Score : <strong>95</strong></span>
+            </div>
+            <h2 class="entreprise">SEQUANO AMENAGEMENT</h2>
+            <div class="role">📍 <strong>[93] SEQUANO AMENAGEMENT</strong></div>
+
+            <div class="actions">
+                <a href="https://www.google.com/search?q=SEQUANO%20AMENAGEMENT%20t%C3%A9l%C3%A9phone%20BTP" target="_blank" class="btn btn-appeler">📞 Chercher N°</a>
+                <button class="btn btn-devis" onclick="ouvrirModal(this)"
+                    data-client="SEQUANO AMENAGEMENT"
+                    data-adresse="[93] SEQUANO AMENAGEMENT"
+                    data-materiel="Pelle Liebherr (926/934/936) + 4 Bennes (évacuation) + Porte-char"
+                    data-travaux="Marché de travaux de démolition, de désamiantage et de curage de l&#x27;église Saint-Jean située dans Zac des Aulnes à Aulnay-sous-Bois (93).">
+                    📝 Créer le devis
+                </button>
+            </div>
+
+            <details class="details-bloc">
+                <summary>Détails du chantier & Matériel</summary>
+                <div class="contenu-details">
+                    <p><strong>Travaux :</strong> Marché de travaux de démolition, de désamiantage et de curage de l&#x27;église Saint-Jean située dans Zac des Aulnes à Aulnay-sous-Bois (93).</p>
+                    <p class="bloc-engin">🚜 <strong>Matériel :</strong> Pelle Liebherr (926/934/936) + 4 Bennes (évacuation) + Porte-char</p>
+                    <p class="raisons">💡 <em>Pourquoi : Démolition / Gros curage + Gros Terrassement / ZAC / Lotissement + IDF (93) - Chantier lourd + Marché déjà attribué</em></p>
+                </div>
+            </details>
+        </div>
+        
+        <div class="carte" data-statut="Confirmé">
+            <div class="carte-entete">
+                <span class="badge badge-confirme">🟢 ATTRIBUÉ</span>
+                <span class="score">Score : <strong>87</strong></span>
+            </div>
+            <h2 class="entreprise">OGAMALP</h2>
+            <div class="role">📍 <strong>[78] CU Grand Paris Seine &amp; Oise</strong></div>
+
+            <div class="actions">
+                <a href="https://www.google.com/search?q=OGAMALP%20t%C3%A9l%C3%A9phone%20BTP" target="_blank" class="btn btn-appeler">📞 Chercher N°</a>
+                <button class="btn btn-devis" onclick="ouvrirModal(this)"
+                    data-client="OGAMALP"
+                    data-adresse="[78] CU Grand Paris Seine &amp; Oise"
+                    data-materiel="Mecalac / Mini-pelles Hyundai + Chargeuse pneus + Bennes avec chauffeur"
+                    data-travaux="Fourniture de fondants routiers pour le traitement hivernal de voirie de la CU GPSEO">
+                    📝 Créer le devis
+                </button>
+            </div>
+
+            <details class="details-bloc">
+                <summary>Détails du chantier & Matériel</summary>
+                <div class="contenu-details">
+                    <p><strong>Travaux :</strong> Fourniture de fondants routiers pour le traitement hivernal de voirie de la CU GPSEO</p>
+                    <p class="bloc-engin">🚜 <strong>Matériel :</strong> Mecalac / Mini-pelles Hyundai + Chargeuse pneus + Bennes avec chauffeur</p>
+                    <p class="raisons">💡 <em>Pourquoi : VRD / Assainissement / Réseaux / Voirie + Viabilité hivernale / Sablage / Salage + Proche Igny (78) + Marché déjà attribué</em></p>
+                </div>
+            </details>
+        </div>
+        
+        <div class="carte" data-statut="Confirmé">
+            <div class="carte-entete">
+                <span class="badge badge-confirme">🟢 ATTRIBUÉ</span>
+                <span class="score">Score : <strong>85</strong></span>
+            </div>
+            <h2 class="entreprise">SAUR</h2>
+            <div class="role">📍 <strong>[77] Maire</strong></div>
+
+            <div class="actions">
+                <a href="https://www.google.com/search?q=SAUR%20t%C3%A9l%C3%A9phone%20BTP" target="_blank" class="btn btn-appeler">📞 Chercher N°</a>
+                <button class="btn btn-devis" onclick="ouvrirModal(this)"
+                    data-client="SAUR"
+                    data-adresse="[77] Maire"
+                    data-materiel="Pelle Liebherr (926/934/936) + 4 Bennes (évacuation) + Porte-char"
+                    data-travaux="Maintenance curative des installations d’assainissements d&#x27;eaux usées et d’eaux pluviales pour les bâtiments de la commune de Pontault-Combault et du CCAS">
+                    📝 Créer le devis
+                </button>
+            </div>
+
+            <details class="details-bloc">
+                <summary>Détails du chantier & Matériel</summary>
+                <div class="contenu-details">
+                    <p><strong>Travaux :</strong> Maintenance curative des installations d’assainissements d&#x27;eaux usées et d’eaux pluviales pour les bâtiments de la commune de Pontault-Combault et du CCAS</p>
+                    <p class="bloc-engin">🚜 <strong>Matériel :</strong> Pelle Liebherr (926/934/936) + 4 Bennes (évacuation) + Porte-char</p>
+                    <p class="raisons">💡 <em>Pourquoi : Démolition / Gros curage + VRD / Assainissement / Réseaux / Voirie + IDF (77) - Chantier lourd + Marché déjà attribué</em></p>
+                </div>
+            </details>
+        </div>
+        
+        <div class="carte" data-statut="Confirmé">
+            <div class="carte-entete">
+                <span class="badge badge-confirme">🟢 ATTRIBUÉ</span>
+                <span class="score">Score : <strong>80</strong></span>
+            </div>
+            <h2 class="entreprise">Seda aisne</h2>
+            <div class="role">📍 <strong>[2] Seda aisne</strong></div>
+
+            <div class="actions">
+                <a href="https://www.google.com/search?q=Seda%20aisne%20t%C3%A9l%C3%A9phone%20BTP" target="_blank" class="btn btn-appeler">📞 Chercher N°</a>
+                <button class="btn btn-devis" onclick="ouvrirModal(this)"
+                    data-client="Seda aisne"
+                    data-adresse="[2] Seda aisne"
+                    data-materiel="Pelle Liebherr (926/934/936) + 4 Bennes (évacuation) + Porte-char"
+                    data-travaux="Démolition de l&#x27;immeuble situé au 61-61bis-63-63bis rue Saint-Martin à CHATEAU-THIERRY (02400) et confortement des mitoyens (ilot 8).">
+                    📝 Créer le devis
+                </button>
+            </div>
+
+            <details class="details-bloc">
+                <summary>Détails du chantier & Matériel</summary>
+                <div class="contenu-details">
+                    <p><strong>Travaux :</strong> Démolition de l&#x27;immeuble situé au 61-61bis-63-63bis rue Saint-Martin à CHATEAU-THIERRY (02400) et confortement des mitoyens (ilot 8).</p>
+                    <p class="bloc-engin">🚜 <strong>Matériel :</strong> Pelle Liebherr (926/934/936) + 4 Bennes (évacuation) + Porte-char</p>
+                    <p class="raisons">💡 <em>Pourquoi : Démolition / Gros curage + VRD / Assainissement / Réseaux / Voirie + Marché déjà attribué</em></p>
+                </div>
+            </details>
+        </div>
+        
+        <div class="carte" data-statut="Confirmé">
+            <div class="carte-entete">
+                <span class="badge badge-confirme">🟢 ATTRIBUÉ</span>
+                <span class="score">Score : <strong>80</strong></span>
+            </div>
+            <h2 class="entreprise">Direction de l&#x27;environnement, de l&#x27;aménagement, du logement et de la mer</h2>
+            <div class="role">📍 <strong>[976] Direction de l&#x27;environnement, de l&#x27;aménagement, du logement et de la mer</strong></div>
+
+            <div class="actions">
+                <a href="https://www.google.com/search?q=Direction%20de%20l%27environnement%2C%20de%20l%27am%C3%A9nagement%2C%20du%20logement%20et%20de%20la%20mer%20t%C3%A9l%C3%A9phone%20BTP" target="_blank" class="btn btn-appeler">📞 Chercher N°</a>
+                <button class="btn btn-devis" onclick="ouvrirModal(this)"
+                    data-client="Direction de l&#x27;environnement, de l&#x27;aménagement, du logement et de la mer"
+                    data-adresse="[976] Direction de l&#x27;environnement, de l&#x27;aménagement, du logement et de la mer"
+                    data-materiel="Pelle Liebherr (926/934/936) + 4 Bennes (évacuation) + Porte-char"
+                    data-travaux="Hydrocurage des ouvrages d’assainissement sur le réseau routier national de Mayotte.">
+                    📝 Créer le devis
+                </button>
+            </div>
+
+            <details class="details-bloc">
+                <summary>Détails du chantier & Matériel</summary>
+                <div class="contenu-details">
+                    <p><strong>Travaux :</strong> Hydrocurage des ouvrages d’assainissement sur le réseau routier national de Mayotte.</p>
+                    <p class="bloc-engin">🚜 <strong>Matériel :</strong> Pelle Liebherr (926/934/936) + 4 Bennes (évacuation) + Porte-char</p>
+                    <p class="raisons">💡 <em>Pourquoi : Démolition / Gros curage + VRD / Assainissement / Réseaux / Voirie + Marché déjà attribué</em></p>
+                </div>
+            </details>
+        </div>
+        
+        <div class="carte" data-statut="Confirmé">
+            <div class="carte-entete">
+                <span class="badge badge-confirme">🟢 ATTRIBUÉ</span>
+                <span class="score">Score : <strong>75</strong></span>
+            </div>
+            <h2 class="entreprise">COMMUNE DE MARCOUSSIS</h2>
+            <div class="role">📍 <strong>[91] COMMUNE DE MARCOUSSIS</strong></div>
+
+            <div class="actions">
+                <a href="https://www.google.com/search?q=COMMUNE%20DE%20MARCOUSSIS%20t%C3%A9l%C3%A9phone%20BTP" target="_blank" class="btn btn-appeler">📞 Chercher N°</a>
+                <button class="btn btn-devis" onclick="ouvrirModal(this)"
+                    data-client="COMMUNE DE MARCOUSSIS"
+                    data-adresse="[91] COMMUNE DE MARCOUSSIS"
+                    data-materiel="Pelle Liebherr (926/934/936) + 4 Bennes (évacuation) + Porte-char"
+                    data-travaux="DÉMOLITION ET RECONSTRUCTION DE DEUX SERRES AGRICOLES, LOCAL TECHNIQUE, FORAGE SUR DALLE ET RÉSEAUX D’IRRIGATION">
+                    📝 Créer le devis
+                </button>
+            </div>
+
+            <details class="details-bloc">
+                <summary>Détails du chantier & Matériel</summary>
+                <div class="contenu-details">
+                    <p><strong>Travaux :</strong> DÉMOLITION ET RECONSTRUCTION DE DEUX SERRES AGRICOLES, LOCAL TECHNIQUE, FORAGE SUR DALLE ET RÉSEAUX D’IRRIGATION</p>
+                    <p class="bloc-engin">🚜 <strong>Matériel :</strong> Pelle Liebherr (926/934/936) + 4 Bennes (évacuation) + Porte-char</p>
+                    <p class="raisons">💡 <em>Pourquoi : Démolition / Gros curage + Essonne (91) + Marché déjà attribué</em></p>
+                </div>
+            </details>
+        </div>
+        
+        <div class="carte" data-statut="Confirmé">
+            <div class="carte-entete">
+                <span class="badge badge-confirme">🟢 ATTRIBUÉ</span>
+                <span class="score">Score : <strong>75</strong></span>
+            </div>
+            <h2 class="entreprise">Ville de Clamart</h2>
+            <div class="role">📍 <strong>[92] Ville de Clamart</strong></div>
+
+            <div class="actions">
+                <a href="https://www.google.com/search?q=Ville%20de%20Clamart%20t%C3%A9l%C3%A9phone%20BTP" target="_blank" class="btn btn-appeler">📞 Chercher N°</a>
+                <button class="btn btn-devis" onclick="ouvrirModal(this)"
+                    data-client="Ville de Clamart"
+                    data-adresse="[92] Ville de Clamart"
+                    data-materiel="Mecalac / Mini-pelles Hyundai + Chargeuse pneus + Bennes avec chauffeur"
+                    data-travaux="Prestations de levés topographiques dans les secteurs du bâtiment, de la voirie et de l&#x27;urbanisme">
+                    📝 Créer le devis
+                </button>
+            </div>
+
+            <details class="details-bloc">
+                <summary>Détails du chantier & Matériel</summary>
+                <div class="contenu-details">
+                    <p><strong>Travaux :</strong> Prestations de levés topographiques dans les secteurs du bâtiment, de la voirie et de l&#x27;urbanisme</p>
+                    <p class="bloc-engin">🚜 <strong>Matériel :</strong> Mecalac / Mini-pelles Hyundai + Chargeuse pneus + Bennes avec chauffeur</p>
+                    <p class="raisons">💡 <em>Pourquoi : VRD / Assainissement / Réseaux / Voirie + À &lt; 20 min d&#x27;Igny + Marché déjà attribué</em></p>
+                </div>
+            </details>
+        </div>
+        
+        <div class="carte" data-statut="Confirmé">
+            <div class="carte-entete">
+                <span class="badge badge-confirme">🟢 ATTRIBUÉ</span>
+                <span class="score">Score : <strong>75</strong></span>
+            </div>
+            <h2 class="entreprise">COLAS FRANCE Etablissement Champigny - Aulnay, EIFFAGE ROUTE ILE DE FRANCE / CENTRE OUEST, SOCIETE NOUVELLE VALLET, ENTREPRISE JEAN LEFEBVRE ILE DE FRANCE</h2>
+            <div class="role">📍 <strong>[94] Mairie de Champigny-sur-Marne</strong></div>
+
+            <div class="actions">
+                <a href="https://www.google.com/search?q=COLAS%20FRANCE%20Etablissement%20Champigny%20-%20Aulnay%2C%20EIFFAGE%20ROUTE%20ILE%20DE%20FRANCE%20/%20CENTRE%20OUEST%2C%20SOCIETE%20NOUVELLE%20VALLET%2C%20ENTREPRISE%20JEAN%20LEFEBVRE%20ILE%20DE%20FRANCE%20t%C3%A9l%C3%A9phone%20BTP" target="_blank" class="btn btn-appeler">📞 Chercher N°</a>
+                <button class="btn btn-devis" onclick="ouvrirModal(this)"
+                    data-client="COLAS FRANCE Etablissement Champigny - Aulnay, EIFFAGE ROUTE ILE DE FRANCE / CENTRE OUEST, SOCIETE NOUVELLE VALLET, ENTREPRISE JEAN LEFEBVRE ILE DE FRANCE"
+                    data-adresse="[94] Mairie de Champigny-sur-Marne"
+                    data-materiel="Mecalac / Mini-pelles Hyundai + Chargeuse pneus + Bennes avec chauffeur"
+                    data-travaux="Accord-cadre travaux neufs de voirie et d&#x27;espaces publics">
+                    📝 Créer le devis
+                </button>
+            </div>
+
+            <details class="details-bloc">
+                <summary>Détails du chantier & Matériel</summary>
+                <div class="contenu-details">
+                    <p><strong>Travaux :</strong> Accord-cadre travaux neufs de voirie et d&#x27;espaces publics</p>
+                    <p class="bloc-engin">🚜 <strong>Matériel :</strong> Mecalac / Mini-pelles Hyundai + Chargeuse pneus + Bennes avec chauffeur</p>
+                    <p class="raisons">💡 <em>Pourquoi : VRD / Assainissement / Réseaux / Voirie + À &lt; 20 min d&#x27;Igny + Marché déjà attribué</em></p>
+                </div>
+            </details>
+        </div>
+        
+        <div class="carte" data-statut="Confirmé">
+            <div class="carte-entete">
+                <span class="badge badge-confirme">🟢 ATTRIBUÉ</span>
+                <span class="score">Score : <strong>75</strong></span>
+            </div>
+            <h2 class="entreprise">Amenagement 77</h2>
+            <div class="role">📍 <strong>[91] Amenagement 77</strong></div>
+
+            <div class="actions">
+                <a href="https://www.google.com/search?q=Amenagement%2077%20t%C3%A9l%C3%A9phone%20BTP" target="_blank" class="btn btn-appeler">📞 Chercher N°</a>
+                <button class="btn btn-devis" onclick="ouvrirModal(this)"
+                    data-client="Amenagement 77"
+                    data-adresse="[91] Amenagement 77"
+                    data-materiel="Pelle Liebherr (926/934/936) + 4 Bennes (évacuation) + Porte-char"
+                    data-travaux="Missions de diagnostics avant travaux de déconstruction pour la réalisation des travaux de démolition, désamiantage et dépollution de la Friche Degond à Longueville (77)">
+                    📝 Créer le devis
+                </button>
+            </div>
+
+            <details class="details-bloc">
+                <summary>Détails du chantier & Matériel</summary>
+                <div class="contenu-details">
+                    <p><strong>Travaux :</strong> Missions de diagnostics avant travaux de déconstruction pour la réalisation des travaux de démolition, désamiantage et dépollution de la Friche Degond à Longueville (77)</p>
+                    <p class="bloc-engin">🚜 <strong>Matériel :</strong> Pelle Liebherr (926/934/936) + 4 Bennes (évacuation) + Porte-char</p>
+                    <p class="raisons">💡 <em>Pourquoi : Démolition / Gros curage + Essonne (91) + Marché déjà attribué</em></p>
+                </div>
+            </details>
+        </div>
+        
+        <div class="carte" data-statut="Confirmé">
+            <div class="carte-entete">
+                <span class="badge badge-confirme">🟢 ATTRIBUÉ</span>
+                <span class="score">Score : <strong>65</strong></span>
+            </div>
+            <h2 class="entreprise">Syndicat Intercommunal d&#x27;Aménagement, de Rivières et du Cycle de l&#x27;Eau (Siarce)</h2>
+            <div class="role">📍 <strong>[91] Syndicat Intercommunal d&#x27;Aménagement, de Rivières et du Cycle de l&#x27;Eau (Siarce)</strong></div>
+
+            <div class="actions">
+                <a href="https://www.google.com/search?q=Syndicat%20Intercommunal%20d%27Am%C3%A9nagement%2C%20de%20Rivi%C3%A8res%20et%20du%20Cycle%20de%20l%27Eau%20%28Siarce%29%20t%C3%A9l%C3%A9phone%20BTP" target="_blank" class="btn btn-appeler">📞 Chercher N°</a>
+                <button class="btn btn-devis" onclick="ouvrirModal(this)"
+                    data-client="Syndicat Intercommunal d&#x27;Aménagement, de Rivières et du Cycle de l&#x27;Eau (Siarce)"
+                    data-adresse="[91] Syndicat Intercommunal d&#x27;Aménagement, de Rivières et du Cycle de l&#x27;Eau (Siarce)"
+                    data-materiel="Mecalac / Mini-pelles Hyundai + Chargeuse pneus + Bennes avec chauffeur"
+                    data-travaux="Réalisation d&#x27;un Schéma directeur d&#x27;assainissement des eaux usées et des eaux pluviales du bassin de collecte de la station d&#x27;épuration de Champcueil">
+                    📝 Créer le devis
+                </button>
+            </div>
+
+            <details class="details-bloc">
+                <summary>Détails du chantier & Matériel</summary>
+                <div class="contenu-details">
+                    <p><strong>Travaux :</strong> Réalisation d&#x27;un Schéma directeur d&#x27;assainissement des eaux usées et des eaux pluviales du bassin de collecte de la station d&#x27;épuration de Champcueil</p>
+                    <p class="bloc-engin">🚜 <strong>Matériel :</strong> Mecalac / Mini-pelles Hyundai + Chargeuse pneus + Bennes avec chauffeur</p>
+                    <p class="raisons">💡 <em>Pourquoi : VRD / Assainissement / Réseaux / Voirie + Essonne (91) + Marché déjà attribué</em></p>
+                </div>
+            </details>
+        </div>
+        
+        <div class="carte" data-statut="Confirmé">
+            <div class="carte-entete">
+                <span class="badge badge-confirme">🟢 ATTRIBUÉ</span>
+                <span class="score">Score : <strong>65</strong></span>
+            </div>
+            <h2 class="entreprise">CA GRAND PARIS SUD SEINE ESSONNE SENART</h2>
+            <div class="role">📍 <strong>[91] CA GRAND PARIS SUD SEINE ESSONNE SENART</strong></div>
+
+            <div class="actions">
+                <a href="https://www.google.com/search?q=CA%20GRAND%20PARIS%20SUD%20SEINE%20ESSONNE%20SENART%20t%C3%A9l%C3%A9phone%20BTP" target="_blank" class="btn btn-appeler">📞 Chercher N°</a>
+                <button class="btn btn-devis" onclick="ouvrirModal(this)"
+                    data-client="CA GRAND PARIS SUD SEINE ESSONNE SENART"
+                    data-adresse="[91] CA GRAND PARIS SUD SEINE ESSONNE SENART"
+                    data-materiel="Mecalac / Mini-pelles Hyundai + Chargeuse pneus + Bennes avec chauffeur"
+                    data-travaux="REQUALIFICATION DES ESPACES PUBLICS ET DES VOIRIES DU QUARTIER CENTRE-VILLE, PLACE DU 14 JUILLET 1789, RUE DE LA LIBERTE ET AVENUE PHILIPPE BUR ENTRE LA RUE DU MARCHAIS BASSON ET LA RUE BAJOT A MOI...">
+                    📝 Créer le devis
+                </button>
+            </div>
+
+            <details class="details-bloc">
+                <summary>Détails du chantier & Matériel</summary>
+                <div class="contenu-details">
+                    <p><strong>Travaux :</strong> REQUALIFICATION DES ESPACES PUBLICS ET DES VOIRIES DU QUARTIER CENTRE-VILLE, PLACE DU 14 JUILLET 1789, RUE DE LA LIBERTE ET AVENUE PHILIPPE BUR ENTRE LA RUE DU MARCHAIS BASSON ET LA RUE BAJOT A MOI...</p>
+                    <p class="bloc-engin">🚜 <strong>Matériel :</strong> Mecalac / Mini-pelles Hyundai + Chargeuse pneus + Bennes avec chauffeur</p>
+                    <p class="raisons">💡 <em>Pourquoi : VRD / Assainissement / Réseaux / Voirie + Essonne (91) + Marché déjà attribué</em></p>
+                </div>
+            </details>
+        </div>
+        
+        <div class="carte" data-statut="Confirmé">
+            <div class="carte-entete">
+                <span class="badge badge-confirme">🟢 ATTRIBUÉ</span>
+                <span class="score">Score : <strong>62</strong></span>
+            </div>
+            <h2 class="entreprise">TERIDEAL, TERIDEAL, LEIGNEL TP</h2>
+            <div class="role">📍 <strong>[92] Syndicat mixte ouvert « Seine et Yvelines Voirie »</strong></div>
+
+            <div class="actions">
+                <a href="https://www.google.com/search?q=TERIDEAL%2C%20TERIDEAL%2C%20LEIGNEL%20TP%20t%C3%A9l%C3%A9phone%20BTP" target="_blank" class="btn btn-appeler">📞 Chercher N°</a>
+                <button class="btn btn-devis" onclick="ouvrirModal(this)"
+                    data-client="TERIDEAL, TERIDEAL, LEIGNEL TP"
+                    data-adresse="[92] Syndicat mixte ouvert « Seine et Yvelines Voirie »"
+                    data-materiel="Saleuse avec chauffeur"
+                    data-travaux="SALAGE ET DENEIGEMENT DES ROUTES DEPARTEMENTALES DES HAUTS DE SEINE">
+                    📝 Créer le devis
+                </button>
+            </div>
+
+            <details class="details-bloc">
+                <summary>Détails du chantier & Matériel</summary>
+                <div class="contenu-details">
+                    <p><strong>Travaux :</strong> SALAGE ET DENEIGEMENT DES ROUTES DEPARTEMENTALES DES HAUTS DE SEINE</p>
+                    <p class="bloc-engin">🚜 <strong>Matériel :</strong> Saleuse avec chauffeur</p>
+                    <p class="raisons">💡 <em>Pourquoi : Viabilité hivernale / Sablage / Salage + Proche Igny (92) + Marché déjà attribué</em></p>
+                </div>
+            </details>
+        </div>
+        
+        <div class="carte" data-statut="Confirmé">
+            <div class="carte-entete">
+                <span class="badge badge-confirme">🟢 ATTRIBUÉ</span>
+                <span class="score">Score : <strong>60</strong></span>
+            </div>
+            <h2 class="entreprise">Communauté de Communes du Pays de Montereau</h2>
+            <div class="role">📍 <strong>[77] Communauté de Communes du Pays de Montereau</strong></div>
+
+            <div class="actions">
+                <a href="https://www.google.com/search?q=Communaut%C3%A9%20de%20Communes%20du%20Pays%20de%20Montereau%20t%C3%A9l%C3%A9phone%20BTP" target="_blank" class="btn btn-appeler">📞 Chercher N°</a>
+                <button class="btn btn-devis" onclick="ouvrirModal(this)"
+                    data-client="Communauté de Communes du Pays de Montereau"
+                    data-adresse="[77] Communauté de Communes du Pays de Montereau"
+                    data-materiel="Pelles Liebherr (926/934/936) + Chargeuse chenilles 63C + Bennes avec chauffeur"
+                    data-travaux="Zac du Moulin à Marolles-sur-Seine - Fouilles archéologiques préventives complémentaires telles que définies par les articles R523.41 et suivants du Code du patrimoine">
+                    📝 Créer le devis
+                </button>
+            </div>
+
+            <details class="details-bloc">
+                <summary>Détails du chantier & Matériel</summary>
+                <div class="contenu-details">
+                    <p><strong>Travaux :</strong> Zac du Moulin à Marolles-sur-Seine - Fouilles archéologiques préventives complémentaires telles que définies par les articles R523.41 et suivants du Code du patrimoine</p>
+                    <p class="bloc-engin">🚜 <strong>Matériel :</strong> Pelles Liebherr (926/934/936) + Chargeuse chenilles 63C + Bennes avec chauffeur</p>
+                    <p class="raisons">💡 <em>Pourquoi : Gros Terrassement / ZAC / Lotissement + IDF (77) - Chantier lourd + Marché déjà attribué</em></p>
+                </div>
+            </details>
+        </div>
+        
+        <div class="carte" data-statut="Confirmé">
+            <div class="carte-entete">
+                <span class="badge badge-confirme">🟢 ATTRIBUÉ</span>
+                <span class="score">Score : <strong>60</strong></span>
+            </div>
+            <h2 class="entreprise">Communauté de Communes du Pays de Montereau</h2>
+            <div class="role">📍 <strong>[77] Communauté de Communes du Pays de Montereau</strong></div>
+
+            <div class="actions">
+                <a href="https://www.google.com/search?q=Communaut%C3%A9%20de%20Communes%20du%20Pays%20de%20Montereau%20t%C3%A9l%C3%A9phone%20BTP" target="_blank" class="btn btn-appeler">📞 Chercher N°</a>
+                <button class="btn btn-devis" onclick="ouvrirModal(this)"
+                    data-client="Communauté de Communes du Pays de Montereau"
+                    data-adresse="[77] Communauté de Communes du Pays de Montereau"
+                    data-materiel="Pelles Liebherr (926/934/936) + Chargeuse chenilles 63C + Bennes avec chauffeur"
+                    data-travaux="Zac du Moulin à Marolles-sur-Seine - Fouilles archéologiques préventives complémentaires telles que définies par les articles R523.41 et suivants du Code du patrimoine">
+                    📝 Créer le devis
+                </button>
+            </div>
+
+            <details class="details-bloc">
+                <summary>Détails du chantier & Matériel</summary>
+                <div class="contenu-details">
+                    <p><strong>Travaux :</strong> Zac du Moulin à Marolles-sur-Seine - Fouilles archéologiques préventives complémentaires telles que définies par les articles R523.41 et suivants du Code du patrimoine</p>
+                    <p class="bloc-engin">🚜 <strong>Matériel :</strong> Pelles Liebherr (926/934/936) + Chargeuse chenilles 63C + Bennes avec chauffeur</p>
+                    <p class="raisons">💡 <em>Pourquoi : Gros Terrassement / ZAC / Lotissement + IDF (77) - Chantier lourd + Marché déjà attribué</em></p>
+                </div>
+            </details>
+        </div>
+        
+        <div class="carte" data-statut="Confirmé">
+            <div class="carte-entete">
+                <span class="badge badge-confirme">🟢 ATTRIBUÉ</span>
+                <span class="score">Score : <strong>60</strong></span>
+            </div>
+            <h2 class="entreprise">INRAP</h2>
+            <div class="role">📍 <strong>[77] EPAFRANCE</strong></div>
+
+            <div class="actions">
+                <a href="https://www.google.com/search?q=INRAP%20t%C3%A9l%C3%A9phone%20BTP" target="_blank" class="btn btn-appeler">📞 Chercher N°</a>
+                <button class="btn btn-devis" onclick="ouvrirModal(this)"
+                    data-client="INRAP"
+                    data-adresse="[77] EPAFRANCE"
+                    data-materiel="Pelles Liebherr (926/934/936) + Chargeuse chenilles 63C + Bennes avec chauffeur"
+                    data-travaux="Réalisation des fouilles archéologiques préalables à l&#x27;aménagement de la ZAC des Trois Ormes à Coupvray.">
+                    📝 Créer le devis
+                </button>
+            </div>
+
+            <details class="details-bloc">
+                <summary>Détails du chantier & Matériel</summary>
+                <div class="contenu-details">
+                    <p><strong>Travaux :</strong> Réalisation des fouilles archéologiques préalables à l&#x27;aménagement de la ZAC des Trois Ormes à Coupvray.</p>
+                    <p class="bloc-engin">🚜 <strong>Matériel :</strong> Pelles Liebherr (926/934/936) + Chargeuse chenilles 63C + Bennes avec chauffeur</p>
+                    <p class="raisons">💡 <em>Pourquoi : Gros Terrassement / ZAC / Lotissement + IDF (77) - Chantier lourd + Marché déjà attribué</em></p>
+                </div>
+            </details>
+        </div>
+        
+        <div class="carte" data-statut="Confirmé">
+            <div class="carte-entete">
+                <span class="badge badge-confirme">🟢 ATTRIBUÉ</span>
+                <span class="score">Score : <strong>60</strong></span>
+            </div>
+            <h2 class="entreprise">Communauté  d&#x27;Agglomération de Cergy-Pontoise</h2>
+            <div class="role">📍 <strong>[95] Communauté d&#x27;Agglomération de Cergy-Pontoise</strong></div>
+
+            <div class="actions">
+                <a href="https://www.google.com/search?q=Communaut%C3%A9%20%20d%27Agglom%C3%A9ration%20de%20Cergy-Pontoise%20t%C3%A9l%C3%A9phone%20BTP" target="_blank" class="btn btn-appeler">📞 Chercher N°</a>
+                <button class="btn btn-devis" onclick="ouvrirModal(this)"
+                    data-client="Communauté  d&#x27;Agglomération de Cergy-Pontoise"
+                    data-adresse="[95] Communauté d&#x27;Agglomération de Cergy-Pontoise"
+                    data-materiel="Pelle Liebherr (926/934/936) + 4 Bennes (évacuation) + Porte-char"
+                    data-travaux="26ta14 Travaux de Démolition de l&#x27;ancienne Station Esso - Rue de la Croix des Maheux">
+                    📝 Créer le devis
+                </button>
+            </div>
+
+            <details class="details-bloc">
+                <summary>Détails du chantier & Matériel</summary>
+                <div class="contenu-details">
+                    <p><strong>Travaux :</strong> 26ta14 Travaux de Démolition de l&#x27;ancienne Station Esso - Rue de la Croix des Maheux</p>
+                    <p class="bloc-engin">🚜 <strong>Matériel :</strong> Pelle Liebherr (926/934/936) + 4 Bennes (évacuation) + Porte-char</p>
+                    <p class="raisons">💡 <em>Pourquoi : Démolition / Gros curage + IDF (95) - Chantier lourd + Marché déjà attribué</em></p>
+                </div>
+            </details>
+        </div>
+        
+        <div class="carte" data-statut="Confirmé">
+            <div class="carte-entete">
+                <span class="badge badge-confirme">🟢 ATTRIBUÉ</span>
+                <span class="score">Score : <strong>57</strong></span>
+            </div>
+            <h2 class="entreprise">Commune d&#x27;Ablis</h2>
+            <div class="role">📍 <strong>[78] Commune d&#x27;Ablis</strong></div>
+
+            <div class="actions">
+                <a href="https://www.google.com/search?q=Commune%20d%27Ablis%20t%C3%A9l%C3%A9phone%20BTP" target="_blank" class="btn btn-appeler">📞 Chercher N°</a>
+                <button class="btn btn-devis" onclick="ouvrirModal(this)"
+                    data-client="Commune d&#x27;Ablis"
+                    data-adresse="[78] Commune d&#x27;Ablis"
+                    data-materiel="Mecalac / Mini-pelles Hyundai + Chargeuse pneus + Bennes avec chauffeur"
+                    data-travaux="Accord-cadre mono-attributaire à bons de commande pour des travaux de voirie, assainissement et eaux pluviales pour la commune d&#x27;Ablis (78)">
+                    📝 Créer le devis
+                </button>
+            </div>
+
+            <details class="details-bloc">
+                <summary>Détails du chantier & Matériel</summary>
+                <div class="contenu-details">
+                    <p><strong>Travaux :</strong> Accord-cadre mono-attributaire à bons de commande pour des travaux de voirie, assainissement et eaux pluviales pour la commune d&#x27;Ablis (78)</p>
+                    <p class="bloc-engin">🚜 <strong>Matériel :</strong> Mecalac / Mini-pelles Hyundai + Chargeuse pneus + Bennes avec chauffeur</p>
+                    <p class="raisons">💡 <em>Pourquoi : VRD / Assainissement / Réseaux / Voirie + Proche Igny (78) + Marché déjà attribué</em></p>
+                </div>
+            </details>
+        </div>
+        
+        <div class="carte" data-statut="Confirmé">
+            <div class="carte-entete">
+                <span class="badge badge-confirme">🟢 ATTRIBUÉ</span>
+                <span class="score">Score : <strong>57</strong></span>
+            </div>
+            <h2 class="entreprise">SUEZ RV Île-de-France</h2>
+            <div class="role">📍 <strong>[78] MAIRIE DE SAINT CYR L&#x27;ECOLE</strong></div>
+
+            <div class="actions">
+                <a href="https://www.google.com/search?q=SUEZ%20RV%20%C3%8Ele-de-France%20t%C3%A9l%C3%A9phone%20BTP" target="_blank" class="btn btn-appeler">📞 Chercher N°</a>
+                <button class="btn btn-devis" onclick="ouvrirModal(this)"
+                    data-client="SUEZ RV Île-de-France"
+                    data-adresse="[78] MAIRIE DE SAINT CYR L&#x27;ECOLE"
+                    data-materiel="Mecalac / Mini-pelles Hyundai + Chargeuse pneus + Bennes avec chauffeur"
+                    data-travaux="Prestations de nettoiement de la voirie et des espaces publics de la commune de Saint-Cyr-L&#x27;Ecole.">
+                    📝 Créer le devis
+                </button>
+            </div>
+
+            <details class="details-bloc">
+                <summary>Détails du chantier & Matériel</summary>
+                <div class="contenu-details">
+                    <p><strong>Travaux :</strong> Prestations de nettoiement de la voirie et des espaces publics de la commune de Saint-Cyr-L&#x27;Ecole.</p>
+                    <p class="bloc-engin">🚜 <strong>Matériel :</strong> Mecalac / Mini-pelles Hyundai + Chargeuse pneus + Bennes avec chauffeur</p>
+                    <p class="raisons">💡 <em>Pourquoi : VRD / Assainissement / Réseaux / Voirie + Proche Igny (78) + Marché déjà attribué</em></p>
+                </div>
+            </details>
+        </div>
+        
+        <div class="carte" data-statut="Confirmé">
+            <div class="carte-entete">
+                <span class="badge badge-confirme">🟢 ATTRIBUÉ</span>
+                <span class="score">Score : <strong>57</strong></span>
+            </div>
+            <h2 class="entreprise">Hauts-de-Seine Habitat - OPH</h2>
+            <div class="role">📍 <strong>[92] Hauts-de-Seine Habitat - OPH</strong></div>
+
+            <div class="actions">
+                <a href="https://www.google.com/search?q=Hauts-de-Seine%20Habitat%20-%20OPH%20t%C3%A9l%C3%A9phone%20BTP" target="_blank" class="btn btn-appeler">📞 Chercher N°</a>
+                <button class="btn btn-devis" onclick="ouvrirModal(this)"
+                    data-client="Hauts-de-Seine Habitat - OPH"
+                    data-adresse="[92] Hauts-de-Seine Habitat - OPH"
+                    data-materiel="Mecalac / Mini-pelles Hyundai + Chargeuse pneus + Bennes avec chauffeur"
+                    data-travaux="MARCHE DE REFECTION D&#x27;ETANCHEITE ET DE LA PROTECTION LOURDE EN VOIRIE FORMANT LE TOIT DU MAGASIN LIDL - VILLE SURESNES">
+                    📝 Créer le devis
+                </button>
+            </div>
+
+            <details class="details-bloc">
+                <summary>Détails du chantier & Matériel</summary>
+                <div class="contenu-details">
+                    <p><strong>Travaux :</strong> MARCHE DE REFECTION D&#x27;ETANCHEITE ET DE LA PROTECTION LOURDE EN VOIRIE FORMANT LE TOIT DU MAGASIN LIDL - VILLE SURESNES</p>
+                    <p class="bloc-engin">🚜 <strong>Matériel :</strong> Mecalac / Mini-pelles Hyundai + Chargeuse pneus + Bennes avec chauffeur</p>
+                    <p class="raisons">💡 <em>Pourquoi : VRD / Assainissement / Réseaux / Voirie + Proche Igny (92) + Marché déjà attribué</em></p>
+                </div>
+            </details>
+        </div>
+        
+        <div class="carte" data-statut="Confirmé">
+            <div class="carte-entete">
+                <span class="badge badge-confirme">🟢 ATTRIBUÉ</span>
+                <span class="score">Score : <strong>57</strong></span>
+            </div>
+            <h2 class="entreprise">ENTREPRISE DE TRAVAUX FAYOLLE ET FILS</h2>
+            <div class="role">📍 <strong>[78] Mairie de Maisons-Laffitte</strong></div>
+
+            <div class="actions">
+                <a href="https://www.google.com/search?q=ENTREPRISE%20DE%20TRAVAUX%20FAYOLLE%20ET%20FILS%20t%C3%A9l%C3%A9phone%20BTP" target="_blank" class="btn btn-appeler">📞 Chercher N°</a>
+                <button class="btn btn-devis" onclick="ouvrirModal(this)"
+                    data-client="ENTREPRISE DE TRAVAUX FAYOLLE ET FILS"
+                    data-adresse="[78] Mairie de Maisons-Laffitte"
+                    data-materiel="Mecalac / Mini-pelles Hyundai + Chargeuse pneus + Bennes avec chauffeur"
+                    data-travaux="Travaux neufs et d&#x27;entretien de voirie de la ville de Maisons-Laffitte">
+                    📝 Créer le devis
+                </button>
+            </div>
+
+            <details class="details-bloc">
+                <summary>Détails du chantier & Matériel</summary>
+                <div class="contenu-details">
+                    <p><strong>Travaux :</strong> Travaux neufs et d&#x27;entretien de voirie de la ville de Maisons-Laffitte</p>
+                    <p class="bloc-engin">🚜 <strong>Matériel :</strong> Mecalac / Mini-pelles Hyundai + Chargeuse pneus + Bennes avec chauffeur</p>
+                    <p class="raisons">💡 <em>Pourquoi : VRD / Assainissement / Réseaux / Voirie + Proche Igny (78) + Marché déjà attribué</em></p>
+                </div>
+            </details>
+        </div>
+        
+        <div class="carte" data-statut="Confirmé">
+            <div class="carte-entete">
+                <span class="badge badge-confirme">🟢 ATTRIBUÉ</span>
+                <span class="score">Score : <strong>57</strong></span>
+            </div>
+            <h2 class="entreprise">COGITE</h2>
+            <div class="role">📍 <strong>[78] Saint-Quentin-en-Yvelines - Communauté d&#x27;agglomération</strong></div>
+
+            <div class="actions">
+                <a href="https://www.google.com/search?q=COGITE%20t%C3%A9l%C3%A9phone%20BTP" target="_blank" class="btn btn-appeler">📞 Chercher N°</a>
+                <button class="btn btn-devis" onclick="ouvrirModal(this)"
+                    data-client="COGITE"
+                    data-adresse="[78] Saint-Quentin-en-Yvelines - Communauté d&#x27;agglomération"
+                    data-materiel="Mecalac / Mini-pelles Hyundai + Chargeuse pneus + Bennes avec chauffeur"
+                    data-travaux="Assistance à maitrise d&#x27;ouvrage pour l&#x27;analyse et le choix du mode de gestion du service public d&#x27;assainissement">
+                    📝 Créer le devis
+                </button>
+            </div>
+
+            <details class="details-bloc">
+                <summary>Détails du chantier & Matériel</summary>
+                <div class="contenu-details">
+                    <p><strong>Travaux :</strong> Assistance à maitrise d&#x27;ouvrage pour l&#x27;analyse et le choix du mode de gestion du service public d&#x27;assainissement</p>
+                    <p class="bloc-engin">🚜 <strong>Matériel :</strong> Mecalac / Mini-pelles Hyundai + Chargeuse pneus + Bennes avec chauffeur</p>
+                    <p class="raisons">💡 <em>Pourquoi : VRD / Assainissement / Réseaux / Voirie + Proche Igny (78) + Marché déjà attribué</em></p>
+                </div>
+            </details>
+        </div>
+        
+        <div class="carte" data-statut="Confirmé">
+            <div class="carte-entete">
+                <span class="badge badge-confirme">🟢 ATTRIBUÉ</span>
+                <span class="score">Score : <strong>57</strong></span>
+            </div>
+            <h2 class="entreprise">IRH INGENIEUR CONSEIL, IRH INGENIEUR CONSEIL, EGIS EAU SA, EGIS EAU SA, AVR INGENIERIE, CABINET D&#x27;ETUDES MARC MERLIN</h2>
+            <div class="role">📍 <strong>[78] CA SAINT GERMAIN BOUCLES DE SEINE</strong></div>
+
+            <div class="actions">
+                <a href="https://www.google.com/search?q=IRH%20INGENIEUR%20CONSEIL%2C%20IRH%20INGENIEUR%20CONSEIL%2C%20EGIS%20EAU%20SA%2C%20EGIS%20EAU%20SA%2C%20AVR%20INGENIERIE%2C%20CABINET%20D%27ETUDES%20MARC%20MERLIN%20t%C3%A9l%C3%A9phone%20BTP" target="_blank" class="btn btn-appeler">📞 Chercher N°</a>
+                <button class="btn btn-devis" onclick="ouvrirModal(this)"
+                    data-client="IRH INGENIEUR CONSEIL, IRH INGENIEUR CONSEIL, EGIS EAU SA, EGIS EAU SA, AVR INGENIERIE, CABINET D&#x27;ETUDES MARC MERLIN"
+                    data-adresse="[78] CA SAINT GERMAIN BOUCLES DE SEINE"
+                    data-materiel="Mecalac / Mini-pelles Hyundai + Chargeuse pneus + Bennes avec chauffeur"
+                    data-travaux="Maîtrise d&#x27;oeuvre pour des travaux de réseaux et d&#x27;ouvrages, d&#x27;assainissement et d&#x27;eaux pluviales">
+                    📝 Créer le devis
+                </button>
+            </div>
+
+            <details class="details-bloc">
+                <summary>Détails du chantier & Matériel</summary>
+                <div class="contenu-details">
+                    <p><strong>Travaux :</strong> Maîtrise d&#x27;oeuvre pour des travaux de réseaux et d&#x27;ouvrages, d&#x27;assainissement et d&#x27;eaux pluviales</p>
+                    <p class="bloc-engin">🚜 <strong>Matériel :</strong> Mecalac / Mini-pelles Hyundai + Chargeuse pneus + Bennes avec chauffeur</p>
+                    <p class="raisons">💡 <em>Pourquoi : VRD / Assainissement / Réseaux / Voirie + Proche Igny (78) + Marché déjà attribué</em></p>
+                </div>
+            </details>
+        </div>
+        
+        <div class="carte" data-statut="Confirmé">
+            <div class="carte-entete">
+                <span class="badge badge-confirme">🟢 ATTRIBUÉ</span>
+                <span class="score">Score : <strong>57</strong></span>
+            </div>
+            <h2 class="entreprise">SETEC ORGANISATION</h2>
+            <div class="role">📍 <strong>[92] Département des Hauts-de-Seine</strong></div>
+
+            <div class="actions">
+                <a href="https://www.google.com/search?q=SETEC%20ORGANISATION%20t%C3%A9l%C3%A9phone%20BTP" target="_blank" class="btn btn-appeler">📞 Chercher N°</a>
+                <button class="btn btn-devis" onclick="ouvrirModal(this)"
+                    data-client="SETEC ORGANISATION"
+                    data-adresse="[92] Département des Hauts-de-Seine"
+                    data-materiel="Mecalac / Mini-pelles Hyundai + Chargeuse pneus + Bennes avec chauffeur"
+                    data-travaux="Marché de missions d&#x27;ordonnance, pilotage et coordination interchantiers de plusieurs opérations de voirie en lien avec le tramway T1 sur les communes de Nanterre et de Rueil-Malmaison">
+                    📝 Créer le devis
+                </button>
+            </div>
+
+            <details class="details-bloc">
+                <summary>Détails du chantier & Matériel</summary>
+                <div class="contenu-details">
+                    <p><strong>Travaux :</strong> Marché de missions d&#x27;ordonnance, pilotage et coordination interchantiers de plusieurs opérations de voirie en lien avec le tramway T1 sur les communes de Nanterre et de Rueil-Malmaison</p>
+                    <p class="bloc-engin">🚜 <strong>Matériel :</strong> Mecalac / Mini-pelles Hyundai + Chargeuse pneus + Bennes avec chauffeur</p>
+                    <p class="raisons">💡 <em>Pourquoi : VRD / Assainissement / Réseaux / Voirie + Proche Igny (92) + Marché déjà attribué</em></p>
+                </div>
+            </details>
+        </div>
+        
+        <div class="carte" data-statut="Confirmé">
+            <div class="carte-entete">
+                <span class="badge badge-confirme">🟢 ATTRIBUÉ</span>
+                <span class="score">Score : <strong>57</strong></span>
+            </div>
+            <h2 class="entreprise">Service départemental d&#x27;incendie et de secours des Yvelines</h2>
+            <div class="role">📍 <strong>[78] Service départemental d&#x27;incendie et de secours des Yvelines</strong></div>
+
+            <div class="actions">
+                <a href="https://www.google.com/search?q=Service%20d%C3%A9partemental%20d%27incendie%20et%20de%20secours%20des%20Yvelines%20t%C3%A9l%C3%A9phone%20BTP" target="_blank" class="btn btn-appeler">📞 Chercher N°</a>
+                <button class="btn btn-devis" onclick="ouvrirModal(this)"
+                    data-client="Service départemental d&#x27;incendie et de secours des Yvelines"
+                    data-adresse="[78] Service départemental d&#x27;incendie et de secours des Yvelines"
+                    data-materiel="Mecalac / Mini-pelles Hyundai + Chargeuse pneus + Bennes avec chauffeur"
+                    data-travaux="Accord-cadre à bons de commande de travaux d&#x27;entretien, de conservation et d&#x27;amélioration des voieries et réseaux divers (Vrd), de signalisations horizontale et verticale, et d&#x27;ins">
+                    📝 Créer le devis
+                </button>
+            </div>
+
+            <details class="details-bloc">
+                <summary>Détails du chantier & Matériel</summary>
+                <div class="contenu-details">
+                    <p><strong>Travaux :</strong> Accord-cadre à bons de commande de travaux d&#x27;entretien, de conservation et d&#x27;amélioration des voieries et réseaux divers (Vrd), de signalisations horizontale et verticale, et d&#x27;ins</p>
+                    <p class="bloc-engin">🚜 <strong>Matériel :</strong> Mecalac / Mini-pelles Hyundai + Chargeuse pneus + Bennes avec chauffeur</p>
+                    <p class="raisons">💡 <em>Pourquoi : VRD / Assainissement / Réseaux / Voirie + Proche Igny (78) + Marché déjà attribué</em></p>
+                </div>
+            </details>
+        </div>
+        
+        <div class="carte" data-statut="Confirmé">
+            <div class="carte-entete">
+                <span class="badge badge-confirme">🟢 ATTRIBUÉ</span>
+                <span class="score">Score : <strong>57</strong></span>
+            </div>
+            <h2 class="entreprise">COLAS ILE DE FRANCE NORMANDIE, VALENTIN, SADE - COMPAGNIE GENERALE DE TRAVAUX HYDRAULIQUES</h2>
+            <div class="role">📍 <strong>[92] Département des Hauts-de-Seine</strong></div>
+
+            <div class="actions">
+                <a href="https://www.google.com/search?q=COLAS%20ILE%20DE%20FRANCE%20NORMANDIE%2C%20VALENTIN%2C%20SADE%20-%20COMPAGNIE%20GENERALE%20DE%20TRAVAUX%20HYDRAULIQUES%20t%C3%A9l%C3%A9phone%20BTP" target="_blank" class="btn btn-appeler">📞 Chercher N°</a>
+                <button class="btn btn-devis" onclick="ouvrirModal(this)"
+                    data-client="COLAS ILE DE FRANCE NORMANDIE, VALENTIN, SADE - COMPAGNIE GENERALE DE TRAVAUX HYDRAULIQUES"
+                    data-adresse="[92] Département des Hauts-de-Seine"
+                    data-materiel="Mecalac / Mini-pelles Hyundai + Chargeuse pneus + Bennes avec chauffeur"
+                    data-travaux="Travaux de réhabilitation des collecteurs d&#x27;assainissement départementaux situes sous la RD 920 Bagneux / Montrouge">
+                    📝 Créer le devis
+                </button>
+            </div>
+
+            <details class="details-bloc">
+                <summary>Détails du chantier & Matériel</summary>
+                <div class="contenu-details">
+                    <p><strong>Travaux :</strong> Travaux de réhabilitation des collecteurs d&#x27;assainissement départementaux situes sous la RD 920 Bagneux / Montrouge</p>
+                    <p class="bloc-engin">🚜 <strong>Matériel :</strong> Mecalac / Mini-pelles Hyundai + Chargeuse pneus + Bennes avec chauffeur</p>
+                    <p class="raisons">💡 <em>Pourquoi : VRD / Assainissement / Réseaux / Voirie + Proche Igny (92) + Marché déjà attribué</em></p>
+                </div>
+            </details>
+        </div>
+        
+
+    <div id="modalDevis" class="modal">
+        <div class="modal-content">
+            <span class="fermer-modal" onclick="fermerModal()">×</span>
+            <h2 style="margin-bottom: 15px; color: var(--jaune-tp);">Générer un Devis PDF</h2>
+
+            <div class="info-client">
+                <strong>Client :</strong> <span id="mod-client"></span><br>
+                <strong>Adresse :</strong> <span id="mod-adresse"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Matériel prévu (modifiable) :</label>
+                <input type="text" id="mod-materiel">
+            </div>
+            <div class="form-group">
+                <label>Prix Journalier HT (Avec chauffeur) :</label>
+                <input type="number" id="mod-prix-jour" placeholder="Ex: 850">
+            </div>
+            <div class="form-group">
+                <label>Forfait Transfert Porte-char HT :</label>
+                <input type="number" id="mod-prix-transport" placeholder="Ex: 350">
+            </div>
+
+            <button class="btn btn-devis" style="width: 100%; margin-top: 10px;" onclick="creerEtTelechargerPDF()">
+                📄 1. Télécharger le devis (PDF)
+            </button>
+            <a id="btn-mail-final" href="#" class="btn btn-appeler" style="display: none; width: 100%; margin-top: 15px;">
+                📧 2. Rédiger l'e-mail au client
+            </a>
+        </div>
+    </div>
+
+    <!-- Modèle PDF invisible avec mentions légales de la SAS I.T.L.T.P. -->
+    <div id="modele-pdf" style="display: none; padding: 40px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #000; background: #fff; width: 800px;">
+        <div style="display: flex; justify-content: space-between; border-bottom: 3px solid #f59e0b; padding-bottom: 20px; margin-bottom: 30px;">
+            <div>
+                <h1 style="margin: 0; color: #f59e0b; font-size: 28px;">I.T.L.T.P.</h1>
+                <p style="margin: 5px 0 0 0; font-weight: bold;">Location avec op&eacute;rateur de mat&eacute;riel de construction</p>
+                <p style="margin: 2px 0;">14 rue Maryse Basti&eacute;, 91430 Igny</p>
+                <p style="margin: 2px 0; color: #666; font-size: 12px;">SAS &bull; SIRET : 490 692 407 00029 &bull; N&deg; TVA : FR92 490 692 407</p>
+            </div>
+            <div style="text-align: right;">
+                <h2 style="margin: 0; font-size: 24px; color: #333;">DEVIS</h2>
+                <p style="margin: 5px 0 0 0;">Date : <span id="pdf-date"></span></p>
+            </div>
+        </div>
+
+        <div style="margin-bottom: 40px; text-align: right;">
+            <div style="display: inline-block; text-align: left; background: #f8f9fa; padding: 15px; border-radius: 5px; min-width: 250px;">
+                <p style="margin: 0 0 5px 0; font-size: 12px; color: #666;">CLIENT :</p>
+                <h3 style="margin: 0; font-size: 16px;" id="pdf-client"></h3>
+                <p style="margin: 5px 0 0 0; font-size: 14px;" id="pdf-adresse"></p>
+            </div>
+        </div>
+
+        <p style="font-weight: bold; margin-bottom: 15px;">Objet : Mise à disposition de matériel avec chauffeur</p>
+        <p style="margin-bottom: 20px; font-size: 14px;">Référence chantier : <span id="pdf-travaux"></span></p>
+
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
+            <thead>
+                <tr style="background-color: #f59e0b; color: #fff;">
+                    <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Désignation</th>
+                    <th style="padding: 10px; text-align: right; border: 1px solid #ddd;">Prix Unitaire HT</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="padding: 12px; border: 1px solid #ddd;" id="pdf-materiel"></td>
+                    <td style="padding: 12px; border: 1px solid #ddd; text-align: right;"><span id="pdf-val-jour"></span> €</td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px; border: 1px solid #ddd;">Forfait transfert porte-char (Aller/Retour)</td>
+                    <td style="padding: 12px; border: 1px solid #ddd; text-align: right;"><span id="pdf-val-trans"></span> €</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div style="display: flex; justify-content: flex-end;">
+            <table style="width: 300px; border-collapse: collapse;">
+                <tr>
+                    <td style="padding: 8px; font-weight: bold;">Total HT :</td>
+                    <td style="padding: 8px; text-align: right; font-weight: bold;"><span id="pdf-total-ht"></span> €</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; color: #666;">TVA (20 %) :</td>
+                    <td style="padding: 8px; text-align: right; color: #666;"><span id="pdf-tva"></span> €</td>
+                </tr>
+                <tr style="border-top: 2px solid #000;">
+                    <td style="padding: 10px; font-weight: bold; font-size: 18px;">Total TTC :</td>
+                    <td style="padding: 10px; text-align: right; font-weight: bold; font-size: 18px;"><span id="pdf-total-ttc"></span> €</td>
+                </tr>
+            </table>
+        </div>
+        <div style="margin-top: 50px; font-size: 11px; color: #888; text-align: center; border-top: 1px solid #eee; padding-top: 15px;">
+            Devis valable 30 jours.<br>
+            En cas d'acceptation, merci de retourner ce devis sign&eacute; et dat&eacute; avec la mention "Bon pour accord".
+        </div>
+    </div>
+
+    <script>
+        let clientEnCours = "";
+        let adresseEnCours = "";
+
+        function ouvrirModal(btn) {
+            clientEnCours = btn.getAttribute('data-client');
+            adresseEnCours = btn.getAttribute('data-adresse');
+            document.getElementById('mod-client').innerText = clientEnCours;
+            document.getElementById('mod-adresse').innerText = adresseEnCours;
+            document.getElementById('mod-materiel').value = btn.getAttribute('data-materiel');
+            document.getElementById('pdf-travaux').innerText = btn.getAttribute('data-travaux');
+
+            document.getElementById('btn-mail-final').style.display = 'none';
+            document.getElementById('modalDevis').style.display = 'flex';
+        }
+
+        function fermerModal() {
+            document.getElementById('modalDevis').style.display = 'none';
+        }
+
+        function creerEtTelechargerPDF() {
+            const pJour = parseFloat(document.getElementById('mod-prix-jour').value) || 0;
+            const pTrans = parseFloat(document.getElementById('mod-prix-transport').value) || 0;
+            const totalHT = pJour + pTrans;
+            const tva = totalHT * 0.20;
+            const totalTTC = totalHT + tva;
+
+            document.getElementById('pdf-date').innerText = new Date().toLocaleDateString('fr-FR');
+            document.getElementById('pdf-client').innerText = clientEnCours;
+            document.getElementById('pdf-adresse').innerText = adresseEnCours;
+            document.getElementById('pdf-materiel').innerText = "Location avec chauffeur : " + document.getElementById('mod-materiel').value;
+            document.getElementById('pdf-val-jour').innerText = pJour.toFixed(2);
+            document.getElementById('pdf-val-trans').innerText = pTrans.toFixed(2);
+            document.getElementById('pdf-total-ht').innerText = totalHT.toFixed(2);
+            document.getElementById('pdf-tva').innerText = tva.toFixed(2);
+            document.getElementById('pdf-total-ttc').innerText = totalTTC.toFixed(2);
+
+            const element = document.getElementById('modele-pdf');
+            element.style.display = 'block';
+
+            const opt = {
+                margin: 0,
+                filename: 'Devis_ITLTP_' + clientEnCours.replace(/[^a-zA-Z0-9]/g, '_') + '.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                element.style.display = 'none';
+
+                const sujet = encodeURIComponent("Devis de location I.T.L.T.P. - " + adresseEnCours);
+                const corps = encodeURIComponent(
+                    "Bonjour,\n\nVeuillez trouver en pièce jointe notre devis concernant votre chantier.\n\n" +
+                    "⚠️ [N'oubliez pas d'insérer le PDF que vous venez de télécharger !]\n\n" +
+                    "Cordialement,\nI.T.L.T.P.\n14 rue Maryse Bastié, 91430 Igny"
+                );
+                const btnMail = document.getElementById('btn-mail-final');
+                btnMail.href = "mailto:?subject=" + sujet + "&body=" + corps;
+                btnMail.style.display = 'block';
+            });
+        }
+    </script>
+</body>
+</html>
