@@ -676,7 +676,7 @@ def envoyer_email_rapport(fichier_html):
     
     date_jour = datetime.now().strftime('%d/%m/%Y')
     payload = {
-        "sender": {"name": "Radar I.T.L.T.P.", "email": "ne-pas-repondre@radarchantiers.fr"},
+        "sender": {"name": "Radar I.T.L.T.P.", "email": "abdoulkarimsaidabdillah@gmail.com"},
         "to": [{"email": destinataire}],
         "subject": f"🚜 Radar I.T.L.T.P. - Chantiers de la semaine ({date_jour})",
         "htmlContent": "<p>Bonjour,</p><p>Veuillez trouver ci-joint le radar des chantiers détectés cette semaine pour l'entreprise I.T.L.T.P.</p><p>Ouvrez le fichier HTML joint sur votre mobile pour consulter les opportunités et générer vos devis.</p><p>Bonne semaine !</p>",
